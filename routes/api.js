@@ -21,4 +21,10 @@ router.post('/authenticate/user', userController.authenticate);
 // POST - Store new file
 router.post('/files', upload.single("file"), auth, fileController.create);
 
+// GET - List files
+router.get('/files', auth, fileController.list);
+
+// GET - List files
+router.delete('/files', auth, fileController.remove);
+
 module.exports = router;

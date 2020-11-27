@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
 exports.getUsers = async function (req, res, next) {
-    const page = req.params.page ? req.params.page : 1;
-    const limit = req.params.limit ? req.params.limit : 10;
+    const page = req.query.page ? req.query.page : 1;
+    const limit = req.query.limit ? req.query.limit : 10;
     try {
         const users = await UserService.getUsers({}, page, limit);
         // console.log(res.userEmail);
@@ -17,8 +17,8 @@ exports.getUsers = async function (req, res, next) {
 }
 
 exports.create = async function (req, res, next) {
-    const page = req.params.page ? req.params.page : 1;
-    const limit = req.params.limit ? req.params.limit : 10;
+    const page = req.query.page ? req.query.page : 1;
+    const limit = req.query.limit ? req.query.limit : 10;
     try {
         const { email, password, confirmPassword } = req.body;
 

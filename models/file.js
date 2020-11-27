@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // create schema for File
 const FileSchema = new Schema({
   _id: { type: String,
-    default: uuidv4()
+    default: uuidv4
   },
   name: {
     type: String,
@@ -14,6 +14,10 @@ const FileSchema = new Schema({
   user_id: {
     type: String,
     required: true,
+  },
+  directory_id: {
+    type: String,
+    default: null,
   },
   path: {
     type: String,

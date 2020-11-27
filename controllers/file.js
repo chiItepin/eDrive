@@ -3,14 +3,51 @@ const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
-exports.getFiles = async function (req, res, next) {
-    const page = req.params.page ? req.params.page : 1;
-    const limit = req.params.limit ? req.params.limit : 10;
+exports.list = async function (req, res, next) {
+    const page = req.query.page ? req.query.page : 1;
+    const limit = req.query.limit ? req.query.limit : 10;
     try {
-        const users = await FileService.getUsers({}, page, limit);
+        const users = await FileService.getFiles({}, page, limit);
         // console.log(res.userEmail);
         // console.log(res.userId);
-        return res.status(200).json({ status: 200, data: users, message: "List of users" });
+        return res.status(200).json({ status: 200, data: users, message: "List of files" });
+    } catch (err) {
+        return res.status(400).json({ status: 400, message: err.message });
+    }
+}
+
+exports.remove = async function (req, res, next) {
+    try {
+        const { id } = req.body;
+
+        const fileToBeRemoved = {
+            _id: id,
+            user_id: res.userId,
+          };
+
+        const checkFile = await FileService.getFile({_id: id});
+        const fileKey = checkFile.path.match(/\/([^\/]+)\/?$/)[1];
+        const s3bucket = new AWS.S3({
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.AWS_DEFAULT_REGION,
+        });
+      
+        // Where you want to store your file
+        const params = {
+          Bucket: process.env.AWS_BUCKET,
+          Key: 'test/' + fileKey,
+        };
+
+        s3bucket.deleteObject(params, async function(err, data) {
+            if (err) {
+              return res.status(400).json({ status: 400, error: true, message: err });
+            } else {
+                const file = await FileService.remove(fileToBeRemoved);
+                return res.status(200).json({ status: 200, data: file, message: "Removed file" });            
+            }
+        });
+        
     } catch (err) {
         return res.status(400).json({ status: 400, message: err.message });
     }
@@ -46,12 +83,12 @@ exports.create = async function (req, res, next) {
 
         s3bucket.upload(params, async function(err, data) {
             if (err) {
-              return res.status(500).json({ status: 500, error: true, message: err });
+              return res.status(400).json({ status: 400, error: true, message: err });
             } else {
               const newFileUploaded = {
                 name: file.originalname,
                 user_id: res.userId,
-                path: s3FileURL + '/test/' + file.originalname,
+                path: s3FileURL + '/' + params.Key,
               };
               const fileUploaded = await FileService.create(newFileUploaded);
 

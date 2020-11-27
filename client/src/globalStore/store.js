@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 
 const StoreContext = createContext();
-let initialState = {
+export let initialState = {
   token: localStorage.getItem('token'),
 };
 let updated = {};

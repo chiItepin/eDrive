@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 // create schema for User
 const UserSchema = new Schema({
   _id: { type: String,
-    default: uuidv4()
+    default: uuidv4
   },
   email: {
     type: String,

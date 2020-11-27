@@ -23,7 +23,12 @@ const Navigation = () => {
                             state.token
                             ? (
                                 <li className={location.pathname === ROUTES.LOGIN ? 'uk-active' : null }>
-                                    <a onClick={ () => { dispatch({ type: 'updateToken', value: null }); history.push('/login'); } } href="#logout">Logout</a>
+                                    <a
+                                        onClick={ () => { dispatch({ type: 'updateToken', value: null }); history.push('/login'); localStorage.removeItem('token') } }
+                                        href="#logout"
+                                    >
+                                        Logout
+                                    </a>
                                 </li>  
                             )
                             : (

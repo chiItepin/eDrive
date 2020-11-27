@@ -3,15 +3,16 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useStore } from '../../globalStore/store';
 import { useSnackbar } from 'react-simple-snackbar'
+import { apiUsers } from '../../services/api/apiUsers';
 
 const LoginUser = () => {
   const [initialValue, setInitialValue] = useState([]);
   const [openSnackbar] = useSnackbar({position: 'top-right'})
-  const { state, dispatch } = useStore();
+  const { dispatch } = useStore();
   const history = useHistory();
 
   useEffect(() => {
-    // console.log('mounted');
+    // getUsers();
   }, []);
 
   const handleInput = (property, value) => {
@@ -41,26 +42,15 @@ const LoginUser = () => {
     })
   };
 
-  const getUsers = () => {
-    axios.get('/api/users',
-    {
-        headers: {
-          Authorization: 'Bearer '+ state.token
-        }
-    })
-      .then(res => {
-      if(res.data){
-      
-      }
-    })
-    .catch(err => {
-      if (err.response.data.message) {
-        openSnackbar(err.response.data.message);
-      } else {
-        openSnackbar('There was a problem retrieving users');
-      }
-    })
-  };
+  // const getUsers = () => {
+  //   apiUsers.getAll()
+  //   .then((res) => {
+  //     console.log(res)
+  //   })
+  //   .catch(error => {
+  //     openSnackbar(error);
+  //   });
+  // };
 
   return (
     <>
