@@ -8,12 +8,15 @@ import { apiUsers } from '../../services/api/apiUsers';
 const LoginUser = () => {
   const [initialValue, setInitialValue] = useState([]);
   const [openSnackbar] = useSnackbar({position: 'top-right'})
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
   const history = useHistory();
 
   useEffect(() => {
     // getUsers();
-  }, []);
+    if (state.token) {
+      history.push('/');
+    }
+  }, [history, state]);
 
   const handleInput = (property, value) => {
     const updated = { ...initialValue };

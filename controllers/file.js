@@ -5,11 +5,8 @@ require('dotenv').config();
 
 exports.list = async function (req, res, next) {
     const page = req.query.page ? req.query.page : 1;
-    const limit = req.query.limit ? req.query.limit : 10;
     try {
-        const users = await FileService.getFiles({}, page, limit);
-        // console.log(res.userEmail);
-        // console.log(res.userId);
+        const users = await FileService.getFiles({}, page);
         return res.status(200).json({ status: 200, data: users, message: "List of files" });
     } catch (err) {
         return res.status(400).json({ status: 400, message: err.message });

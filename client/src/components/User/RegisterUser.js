@@ -7,7 +7,7 @@ import { useSnackbar } from 'react-simple-snackbar'
 const RegisterUser = () => {
   const [initialValue, setInitialValue] = useState([]);
   const [openSnackbar] = useSnackbar({position: 'top-right'})
-  const { dispatch } = useStore();
+  const { state, dispatch } = useStore();
   const history = useHistory();
 
   const handleInput = (property, value) => {
@@ -36,6 +36,12 @@ const RegisterUser = () => {
       }
     })
   };
+
+  useEffect(() => {
+    if (state.token) {
+      history.push('/');
+    }
+  }, [history, state]);
 
   return (
     <>
